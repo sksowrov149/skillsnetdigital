@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillsNet Digital</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; }
+        .navbar { background: #1a2a6c; color: white; padding: 15px; text-align: center; font-size: 22px; font-weight: bold; }
+        .container { background: white; width: 90%; max-width: 400px; margin: 30px auto; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .page, .step { display: none; }
+        .active { display: block !important; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { background: #1a2a6c; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        .link { color: #1a2a6c; cursor: pointer; font-weight: bold; }
+        .info-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #1a2a6c; display: block; margin: 0 auto 10px; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">SkillsNet Digital</div>
+
+<div class="container" id="mainBox">
+    <div id="loginPage" class="page active">
+        <h2 style="text-align:center;">User Login</h2>
+        <input type="number" id="lPhone" placeholder="Phone Number">
+        <input type="password" id="lPass" placeholder="Password">
+        <button onclick="doLogin()">Login</button>
+        <p style="text-align:center; font-size:14px;">Don't have account? <span class="link" onclick="showPage('regPage')">Sign-up</span></p>
+    </div>
+
+    <div id="regPage" class="page">
+        <h2 style="text-align:center;">Create Account</h2>
+        <div id="step1" class="step active">
+            <input type="text" id="fname" placeholder="First Name">
+            <input type="text" id="lname" placeholder="Last Name">
+            <select id="lang"><option value="Bangla">Bangla</option><option value="English">English</option></select>
+            <button onclick="goToStep(2)">Next</button>
+        </div>
+        <div id="step2" class="step">
+            <select id="country"><option value="Bangladesh">Bangladesh</option><option value="India">India</option></select>
+            <input type="number" id="phone" placeholder="Phone Number">
+            <input type="number" id="wa" placeholder="WhatsApp Number">
+            <button onclick="goToStep(3)">Next</button>
+        </div>
+        <div id="step3" class="step">
+            <input type="email" id="email" placeholder="Gmail Address">
+            <input type="password" id="regPass" placeholder="Set Password">
+            <button style="background:#28a745" onclick="doRegister()">Complete</button>
+        </div>
+    </div>
+
+    <div id="dashboardPage" class="page">
+        <h3 id="welcomeMsg" style="text-align:center;"></h3>
+        <div style="background:#eef7ff; padding:20px; border-radius:10px; text-align:center; cursor:pointer;" onclick="openProfile()">
+            <strong>👤 View Profile</strong>
+        </div>
+        <button style="background:#ff4d4d; margin-top:20px;" onclick="location.reload()">Logout</button>
+    </div>
+</div>
+
+<div id="profileViewPage" style="display:none; padding:20px; background:white; min-height:100vh;">
+    <div style="text-align:center;"><img id="uPic" src="" class="profile-pic"><h2 id="uNameTitle"></h2></div>
+    <div id="viewMode">
+        <div class="info-row"><b>ID:</b> <span id="uID"></span></div>
+        <div class="info-row"><b>WhatsApp:</b> <span id="uWA"></span></div>
+        <div class="info-row"><b>Email:</b> <span id="uEmail"></span></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button style="background:#6c757d;" onclick="closeProfile()">Back</button>
+            <button style="background:#ffc107; color:black;" onclick="toggleEdit(true)">Edit</button>
+        </div>
+    </div>
+    <div id="editMode" style="display:none;">
+        <input type="text" id="editName"><input type="number" id="editWA"><input type="email" id="editEmail">
+        <button style="background:#28a745;" onclick="saveProfile()">Save</button>
+        <button style="background:#6c757d; margin-top:5px;" onclick="toggleEdit(false)">Cancel</button>
+    </div>
+</div>
+
+<script>
+    var usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
+    var loggedInUser = null;
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+    function goToStep(s) {
+        document.querySelectorAll('.step').forEach(st => st.classList.remove('active'));
+        document.getElementById('step' + s).classList.add('active');
+    }
+    function doRegister() {
+        var f = document.getElementById('fname').value;
+        var p = document.getElementById('phone').value;
+        if(!f || !p) return alert("Fill Name & Phone!");
+        var user = {
+            name: f + " " + document.getElementById('lname').value,
+            phone: p, wa: document.getElementById('wa').value, email: document.getElementById('email').value,
+            pass: document.getElementById('regPass').value, id: 1000 + usersList.length + 1,
+            photo: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        };
+        usersList.push(user);
+        localStorage.setItem('allUsers', JSON.stringify(usersList));
+        alert("Registration Success!");
+        location.reload();
+    }
+    function doLogin() {
+        var ph = document.getElementById('lPhone').value;
+        var pa = document.getElementById('lPass').value;
+        loggedInUser = usersList.find(u => u.phone === ph && u.pass === pa);
+        if(loggedInUser) {
+            showPage('dashboardPage');
+            document.getElementById('welcomeMsg').innerText = "Welcome, " + loggedInUser.name;
+        } else { alert("Wrong Info!"); }
+    }
+    function openProfile() {
+        document.getElementById('mainBox').style.display = 'none';
+        document.getElementById('profileViewPage').style.display = 'block';
+        updateProfileUI();
+    }
+    function updateProfileUI() {
+        document.getElementById('uNameTitle').innerText = loggedInUser.name;
+        document.getElementById('uID').innerText = loggedInUser.id;
+        document.getElementById('uWA').innerText = loggedInUser.wa || "N/A";
+        document.getElementById('uEmail').innerText = loggedInUser.email || "N/A";
+        document.getElementById('uPic').src = loggedInUser.photo;
+    }
+    function toggleEdit(isEdit) {
+        document.getElementById('viewMode').style.display = isEdit ? 'none' : 'block';
+        document.getElementById('editMode').style.display = isEdit ? 'block' : 'none';
+        if(isEdit) {
+            document.getElementById('editName').value = loggedInUser.name;
+            document.getElementById('editWA').value = loggedInUser.wa;
+            document.getElementById('editEmail').value = loggedInUser.email;
+        }
+    }
+    function saveProfile() {
+        loggedInUser.name = document.getElementById('editName').value;
+        loggedInUser.wa = document.getElementById('editWA').value;
+        loggedInUser.email = document.getElementById('editEmail').value;
+        var index = usersList.findIndex(u => u.phone === loggedInUser.phone);
+        usersList[index] = loggedInUser;
+        localStorage.setItem('allUsers', JSON.stringify(usersList));
+        alert("Updated!");
+        updateProfileUI();
+        toggleEdit(false);
+    }
+    function closeProfile() {
+        document.getElementById('profileViewPage').style.display = 'none';
+        document.getElementById('mainBox').style.display = 'block';
+    }
+</script>
+</body>
+</html>
