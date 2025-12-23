@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillsNet Digital - Admin Pro</title>
+    <title>SkillsNet Digital - Full Control</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
-        .navbar { background: #1a2a6c; color: white; padding: 15px; text-align: center; font-weight: bold; }
-        .container { background: white; width: 95%; max-width: 420px; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding-bottom: 50px; }
+        .navbar { background: #1a2a6c; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 20px; }
+        .container { background: white; width: 95%; max-width: 450px; margin: 20px auto; padding: 25px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
         .page, .step { display: none; }
         .active { display: block !important; }
-        input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #1a2a6c; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
-        .flex-btns { display: flex; gap: 5px; margin-top: 10px; }
-        .admin-table-container { overflow-x: auto; background: white; padding: 10px; border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #1a2a6c; color: white; }
-        .btn-edit { background: #ffc107; color: black; padding: 4px 8px; border-radius: 3px; cursor: pointer; border:none; font-size: 10px; }
-        .btn-del { background: #ff4d4d; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; border:none; font-size: 10px; margin-left: 2px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { background: #1a2a6c; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        .admin-table th, .admin-table td { border: 1px solid #eee; padding: 10px; text-align: left; }
+        .admin-table th { background: #1a2a6c; color: white; }
+        .action-btns { display: flex; gap: 5px; }
+        .btn-v { background: #17a2b8; padding: 5px; font-size: 11px; }
+        .btn-e { background: #ffc107; color: black; padding: 5px; font-size: 11px; }
+        .btn-d { background: #dc3545; padding: 5px; font-size: 11px; }
+        /* এডিট মোডাল */
+        #masterModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:999; overflow-y:auto; padding: 20px; box-sizing: border-box; color: white; }
     </style>
 </head>
 <body>
@@ -27,146 +29,154 @@
 
 <div class="container" id="mainBox">
     <div id="loginPage" class="page active">
-        <h3 style="text-align:center;">User Login</h3>
+        <h2 style="text-align:center;">Login</h2>
         <input type="number" id="lPhone" placeholder="Phone Number">
         <input type="password" id="lPass" placeholder="Password">
         <button onclick="doLogin()">Login</button>
-        <p style="text-align:center; font-size:13px; color:#666;">Don't have account? <span style="color:#1a2a6c; cursor:pointer; font-weight:bold;" onclick="showPage('regPage')">Sign-up</span></p>
-        <p style="text-align:center; margin-top:20px;"><span style="color:#999; cursor:pointer; font-size:12px;" onclick="showPage('adminLoginPage')">Admin Access</span></p>
+        <p style="text-align:center;">Don't have account? <span style="color:blue;cursor:pointer" onclick="showPage('regPage')">Sign-up</span></p>
+        <p style="text-align:center;margin-top:30px;"><span style="color:#ccc;cursor:pointer" onclick="showPage('adminLoginPage')">Admin Access</span></p>
     </div>
 
     <div id="regPage" class="page">
-        <h3 style="text-align:center;">Registration</h3>
+        <h3>Create Account</h3>
         <div id="step1" class="step active">
-            <input type="text" id="fname" placeholder="First Name">
-            <input type="text" id="lname" placeholder="Last Name">
+            <input type="text" id="fname" placeholder="Full Name">
+            <input type="number" id="phone" placeholder="Phone Number">
             <button onclick="goToStep(2)">Next</button>
         </div>
         <div id="step2" class="step">
-            <input type="number" id="phone" placeholder="Phone Number">
-            <input type="number" id="wa" placeholder="WhatsApp">
-            <div class="flex-btns"><button style="background:#6c757d" onclick="goToStep(1)">Back</button><button onclick="goToStep(3)">Next</button></div>
-        </div>
-        <div id="step3" class="step">
             <input type="email" id="email" placeholder="Email Address">
-            <input type="password" id="regPass" placeholder="Set Password">
-            <div class="flex-btns"><button style="background:#6c757d" onclick="goToStep(2)">Back</button><button style="background:#28a745" onclick="doRegister()">Complete</button></div>
+            <input type="password" id="regPass" placeholder="Password">
+            <button onclick="doRegister()">Join Now</button>
+            <button style="background:gray" onclick="goToStep(1)">Back</button>
         </div>
     </div>
 
     <div id="adminLoginPage" class="page">
-        <h3 style="text-align:center;">Admin Login</h3>
-        <input type="text" id="adminUser" placeholder="Admin Username">
-        <input type="password" id="adminPass" placeholder="Admin Password">
-        <button onclick="doAdminLogin()">Login as Admin</button>
-        <button style="background:#6c757d; margin-top:5px;" onclick="showPage('loginPage')">Back</button>
+        <h3>Admin Panel Login</h3>
+        <input type="text" id="adUser" placeholder="Username">
+        <input type="password" id="adPass" placeholder="Password">
+        <button onclick="adminLogin()">Access Admin</button>
+        <button style="background:gray" onclick="showPage('loginPage')">Back</button>
     </div>
 
-    <div id="dashboardPage" class="page">
-        <h4 id="welcomeMsg" style="text-align:center;"></h4>
-        <div style="background:#eef; padding:15px; border-radius:8px; text-align:center;">
-            <b>আপনার প্রোফাইল বর্তমানে সক্রিয়।</b>
-        </div>
-        <button style="background:#ff4d4d; margin-top:20px;" onclick="location.reload()">Logout</button>
+    <div id="dashboard" class="page">
+        <h3 id="uHello"></h3>
+        <button onclick="location.reload()" style="background:red">Logout</button>
     </div>
 </div>
 
-<div id="adminPanel" style="display:none; padding:10px;">
-    <h3 style="text-align:center;">All User Data</h3>
-    <div class="admin-table-container">
-        <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Pass</th><th>Action</th></tr></thead>
-            <tbody id="adminBody"></tbody>
+<div id="adminPanel" style="display:none; padding:15px;">
+    <h2 style="text-align:center;">User Master Database</h2>
+    <div style="overflow-x:auto;">
+        <table class="admin-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Actions</th></tr></thead>
+            <tbody id="masterTableBody"></tbody>
         </table>
     </div>
-    <button style="background:#333; margin-top:20px;" onclick="location.reload()">Close Admin Panel</button>
+    <button onclick="location.reload()" style="background:#333; margin-top:20px;">Exit Admin Panel</button>
 </div>
 
-<div id="adminEditBox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); color:white; padding:30px; box-sizing:border-box;">
-    <h3>Edit User Information</h3>
-    <input type="hidden" id="editIdx">
-    <label>Name:</label><input type="text" id="adEditName">
-    <label>Phone:</label><input type="number" id="adEditPhone">
-    <label>Email:</label><input type="email" id="adEditEmail">
-    <button style="background:#28a745" onclick="adminSaveChange()">Update Data</button>
-    <button style="background:#ff4d4d; margin-top:10px;" onclick="document.getElementById('adminEditBox').style.display='none'">Cancel</button>
+<div id="masterModal">
+    <h3>User Full Details & Edit</h3>
+    <div id="dynamicFields"></div>
+    <hr>
+    <button style="background:green" onclick="saveMasterChange()">Save All Changes</button>
+    <button style="background:red" onclick="closeModal()">Close</button>
 </div>
 
 <script>
     var users = JSON.parse(localStorage.getItem('allUsers')) || [];
+    var currentEditIdx = null;
 
-    function showPage(id) {
+    function showPage(id){ 
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
-    function goToStep(s) {
+    function goToStep(s){ 
         document.querySelectorAll('.step').forEach(st => st.classList.remove('active'));
-        document.getElementById('step' + s).classList.add('active');
+        document.getElementById('step'+s).classList.add('active');
     }
+
     function doRegister() {
-        var user = {
-            name: document.getElementById('fname').value + " " + document.getElementById('lname').value,
-            phone: document.getElementById('phone').value, wa: document.getElementById('wa').value,
-            email: document.getElementById('email').value, pass: document.getElementById('regPass').value,
-            id: 202500 + users.length + 1
+        let u = {
+            id: "SND-" + (100 + users.length + 1),
+            name: document.getElementById('fname').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            pass: document.getElementById('regPass').value,
+            joinDate: new Date().toLocaleDateString()
         };
-        users.push(user);
+        users.push(u);
         localStorage.setItem('allUsers', JSON.stringify(users));
-        alert("Success! ID: " + user.id);
+        alert("Registration Successful!");
         location.reload();
     }
+
     function doLogin() {
-        var u = users.find(u => u.phone === document.getElementById('lPhone').value && u.pass === document.getElementById('lPass').value);
-        if(u) { showPage('dashboardPage'); document.getElementById('welcomeMsg').innerText = "Hello, " + u.name; }
-        else alert("Wrong Login!");
+        let u = users.find(x => x.phone === document.getElementById('lPhone').value && x.pass === document.getElementById('lPass').value);
+        if(u) { showPage('dashboard'); document.getElementById('uHello').innerText = "স্বাগতম, " + u.name; }
+        else alert("Invalid Login");
     }
-    function doAdminLogin() {
-        if(document.getElementById('adminUser').value === 'admin' && document.getElementById('adminPass').value === '1234') {
+
+    function adminLogin() {
+        if(document.getElementById('adUser').value === 'admin' && document.getElementById('adPass').value === '1234') {
             document.getElementById('mainBox').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            loadAdminTable();
-        } else alert("Access Denied!");
+            loadMasterTable();
+        } else alert("Denied!");
     }
-    function loadAdminTable() {
+
+    function loadMasterTable() {
         let html = '';
-        users.forEach((u, index) => {
+        users.forEach((u, i) => {
             html += `<tr>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
                 <td>${u.phone}</td>
-                <td>${u.pass}</td>
-                <td>
-                    <button class="btn-edit" onclick="adminEditUser(${index})">Edit</button>
-                    <button class="btn-del" onclick="adminDeleteUser(${index})">Del</button>
+                <td class="action-btns">
+                    <button class="btn-e" onclick="openMasterEdit(${i})">Manage</button>
+                    <button class="btn-d" onclick="deleteUser(${i})">Del</button>
                 </td>
             </tr>`;
         });
-        document.getElementById('adminBody').innerHTML = html;
+        document.getElementById('masterTableBody').innerHTML = html;
     }
-    function adminEditUser(index) {
-        document.getElementById('adminEditBox').style.display = 'block';
-        document.getElementById('editIdx').value = index;
-        document.getElementById('adEditName').value = users[index].name;
-        document.getElementById('adEditPhone').value = users[index].phone;
-        document.getElementById('adEditEmail').value = users[index].email;
+
+    function openMasterEdit(index) {
+        currentEditIdx = index;
+        let user = users[index];
+        let container = document.getElementById('dynamicFields');
+        container.innerHTML = '';
+        
+        // ইউজারের সব ডেটা অটোমেটিক ইনপুট ফিল্ডে নিয়ে আসবে (ভবিষ্যতে যাই যোগ করেন না কেন)
+        for (let key in user) {
+            container.innerHTML += `<label style="display:block;margin-top:10px;">${key.toUpperCase()}:</label>
+                                    <input type="text" id="edit_${key}" value="${user[key]}">`;
+        }
+        document.getElementById('masterModal').style.display = 'block';
     }
-    function adminSaveChange() {
-        let idx = document.getElementById('editIdx').value;
-        users[idx].name = document.getElementById('adEditName').value;
-        users[idx].phone = document.getElementById('adEditPhone').value;
-        users[idx].email = document.getElementById('adEditEmail').value;
+
+    function saveMasterChange() {
+        let user = users[currentEditIdx];
+        for (let key in user) {
+            user[key] = document.getElementById('edit_' + key).value;
+        }
         localStorage.setItem('allUsers', JSON.stringify(users));
-        alert("Updated Successfully!");
-        document.getElementById('adminEditBox').style.display = 'none';
-        loadAdminTable();
+        alert("সব তথ্য আপডেট হয়েছে!");
+        closeModal();
+        loadMasterTable();
     }
-    function adminDeleteUser(index) {
-        if(confirm("Are you sure to delete this user?")) {
-            users.splice(index, 1);
+
+    function deleteUser(i) {
+        if(confirm("ইউজারটি ডিলিট করতে চান?")) {
+            users.splice(i, 1);
             localStorage.setItem('allUsers', JSON.stringify(users));
-            loadAdminTable();
+            loadMasterTable();
         }
     }
+
+    function closeModal() { document.getElementById('masterModal').style.display = 'none'; }
 </script>
 </body>
 </html>
