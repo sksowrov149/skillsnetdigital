@@ -3,120 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillsNet Digital - Portal</title>
+    <title>SkillsNet Digital - Admin Pro</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f2f5; margin: 0; padding: 0; }
-        .navbar { background: #1a2a6c; color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .container { background: white; width: 90%; max-width: 420px; margin: 30px auto; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; }
+        .navbar { background: #1a2a6c; color: white; padding: 15px; text-align: center; font-weight: bold; }
+        .container { background: white; width: 95%; max-width: 420px; margin: 20px auto; padding: 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .page, .step { display: none; }
         .active { display: block !important; }
-        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
-        button { background: #1a2a6c; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; margin-top: 10px; }
-        .flex-btns { display: flex; gap: 10px; }
-        .footer-links { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
-        .link { color: #1a2a6c; cursor: pointer; font-weight: bold; }
-        .info-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; }
-        .profile-pic { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #1a2a6c; display: block; margin: 0 auto 15px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        input, select { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #1a2a6c; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        .flex-btns { display: flex; gap: 5px; margin-top: 10px; }
+        .admin-table-container { overflow-x: auto; background: white; padding: 10px; border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background: #1a2a6c; color: white; }
+        .btn-edit { background: #ffc107; color: black; padding: 4px 8px; border-radius: 3px; cursor: pointer; border:none; font-size: 10px; }
+        .btn-del { background: #ff4d4d; color: white; padding: 4px 8px; border-radius: 3px; cursor: pointer; border:none; font-size: 10px; margin-left: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="navbar" id="topNav">SkillsNet Digital</div>
+<div class="navbar">SkillsNet Digital</div>
 
-    <div class="container" id="mainBox">
-        
-        <div id="loginPage" class="page active">
-            <h2 style="text-align:center;">User Login</h2>
-            <input type="number" id="lPhone" placeholder="Phone Number">
-            <input type="password" id="lPass" placeholder="Password">
-            <button onclick="doLogin()">Login</button>
-            <div class="footer-links">
-                Don't have account? <span class="link" onclick="showPage('regPage')">Sign-up</span><br><br>
-                <span class="link" style="color:#999;" onclick="showPage('adminLoginPage')">Admin Access</span>
-            </div>
+<div class="container" id="mainBox">
+    <div id="loginPage" class="page active">
+        <h3 style="text-align:center;">User Login</h3>
+        <input type="number" id="lPhone" placeholder="Phone Number">
+        <input type="password" id="lPass" placeholder="Password">
+        <button onclick="doLogin()">Login</button>
+        <p style="text-align:center; font-size:13px; color:#666;">Don't have account? <span style="color:#1a2a6c; cursor:pointer; font-weight:bold;" onclick="showPage('regPage')">Sign-up</span></p>
+        <p style="text-align:center; margin-top:20px;"><span style="color:#999; cursor:pointer; font-size:12px;" onclick="showPage('adminLoginPage')">Admin Access</span></p>
+    </div>
+
+    <div id="regPage" class="page">
+        <h3 style="text-align:center;">Registration</h3>
+        <div id="step1" class="step active">
+            <input type="text" id="fname" placeholder="First Name">
+            <input type="text" id="lname" placeholder="Last Name">
+            <button onclick="goToStep(2)">Next</button>
         </div>
-
-        <div id="regPage" class="page">
-            <h2 style="text-align:center;">Create Account</h2>
-            <div id="step1" class="step active">
-                <input type="text" id="fname" placeholder="First Name">
-                <input type="text" id="lname" placeholder="Last Name">
-                <select id="lang"><option value="Bangla">Bangla</option><option value="English">English</option></select>
-                <button onclick="goToStep(2)">Next Step</button>
-            </div>
-            <div id="step2" class="step">
-                <select id="country"><option value="Bangladesh">Bangladesh</option><option value="India">India</option></select>
-                <input type="number" id="phone" placeholder="Phone Number">
-                <input type="number" id="wa" placeholder="WhatsApp Number">
-                <div class="flex-btns">
-                    <button style="background:#6c757d" onclick="goToStep(1)">Back</button>
-                    <button onclick="goToStep(3)">Next Step</button>
-                </div>
-            </div>
-            <div id="step3" class="step">
-                <input type="email" id="email" placeholder="Gmail Address">
-                <input type="password" id="regPass" placeholder="Set Password">
-                <div class="flex-btns">
-                    <button style="background:#6c757d" onclick="goToStep(2)">Back</button>
-                    <button style="background:#28a745" onclick="doRegister()">Join Now</button>
-                </div>
-            </div>
-            <div class="footer-links"><span class="link" onclick="showPage('loginPage')">Back to Login</span></div>
+        <div id="step2" class="step">
+            <input type="number" id="phone" placeholder="Phone Number">
+            <input type="number" id="wa" placeholder="WhatsApp">
+            <div class="flex-btns"><button style="background:#6c757d" onclick="goToStep(1)">Back</button><button onclick="goToStep(3)">Next</button></div>
         </div>
-
-        <div id="adminLoginPage" class="page">
-            <h2 style="text-align:center;">Admin Login</h2>
-            <input type="text" id="adminUser" placeholder="Username">
-            <input type="password" id="adminPass" placeholder="Password">
-            <button style="background:#333" onclick="doAdminLogin()">Login Admin</button>
-            <div class="footer-links"><span class="link" onclick="showPage('loginPage')">Back</span></div>
-        </div>
-
-        <div id="dashboardPage" class="page">
-            <h3 id="welcomeMsg" style="text-align:center;"></h3>
-            <div style="background:#f4f7ff; padding:20px; border-radius:12px; text-align:center; cursor:pointer; border:1px solid #1a2a6c;" onclick="openProfile()">
-                👤<br><strong>View Profile</strong>
-            </div>
-            <button style="background:#ff4d4d; margin-top:20px;" onclick="location.reload()">Logout</button>
+        <div id="step3" class="step">
+            <input type="email" id="email" placeholder="Email Address">
+            <input type="password" id="regPass" placeholder="Set Password">
+            <div class="flex-btns"><button style="background:#6c757d" onclick="goToStep(2)">Back</button><button style="background:#28a745" onclick="doRegister()">Complete</button></div>
         </div>
     </div>
 
-    <div id="profileViewPage" style="display:none; padding:20px; background:white; min-height:100vh;">
-        <div style="text-align:center;"><img id="uPic" src="" class="profile-pic"><h2 id="uNameTitle"></h2></div>
-        <div id="viewMode">
-            <div class="info-row"><b>Student ID:</b> <span id="uID"></span></div>
-            <div class="info-row"><b>WhatsApp:</b> <span id="uWA"></span></div>
-            <div class="info-row"><b>Email:</b> <span id="uEmail"></span></div>
-            <div class="info-row"><b>Country:</b> <span id="uCountry"></span></div>
-            <div class="flex-btns" style="margin-top:20px;">
-                <button style="background:#6c757d;" onclick="closeProfile()">Back</button>
-                <button style="background:#ffc107; color:black;" onclick="toggleEdit(true)">Edit</button>
-            </div>
-        </div>
-        <div id="editMode" style="display:none;">
-            <input type="text" id="editName"><input type="number" id="editWA"><input type="email" id="editEmail">
-            <button style="background:#28a745;" onclick="saveProfile()">Save Changes</button>
-            <button style="background:#6c757d; margin-top:5px;" onclick="toggleEdit(false)">Cancel</button>
-        </div>
+    <div id="adminLoginPage" class="page">
+        <h3 style="text-align:center;">Admin Login</h3>
+        <input type="text" id="adminUser" placeholder="Admin Username">
+        <input type="password" id="adminPass" placeholder="Admin Password">
+        <button onclick="doAdminLogin()">Login as Admin</button>
+        <button style="background:#6c757d; margin-top:5px;" onclick="showPage('loginPage')">Back</button>
     </div>
 
-    <div id="adminPanel" style="display:none; padding:20px;">
-        <h2 style="text-align:center;">User Database</h2>
-        <div style="overflow-x:auto;">
-            <table id="adminTable">
-                <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>WhatsApp</th></tr></thead>
-                <tbody id="adminBody"></tbody>
-            </table>
+    <div id="dashboardPage" class="page">
+        <h4 id="welcomeMsg" style="text-align:center;"></h4>
+        <div style="background:#eef; padding:15px; border-radius:8px; text-align:center;">
+            <b>আপনার প্রোফাইল বর্তমানে সক্রিয়।</b>
         </div>
-        <button style="background:#333; margin-top:20px;" onclick="location.reload()">Exit Admin</button>
+        <button style="background:#ff4d4d; margin-top:20px;" onclick="location.reload()">Logout</button>
     </div>
+</div>
+
+<div id="adminPanel" style="display:none; padding:10px;">
+    <h3 style="text-align:center;">All User Data</h3>
+    <div class="admin-table-container">
+        <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Pass</th><th>Action</th></tr></thead>
+            <tbody id="adminBody"></tbody>
+        </table>
+    </div>
+    <button style="background:#333; margin-top:20px;" onclick="location.reload()">Close Admin Panel</button>
+</div>
+
+<div id="adminEditBox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); color:white; padding:30px; box-sizing:border-box;">
+    <h3>Edit User Information</h3>
+    <input type="hidden" id="editIdx">
+    <label>Name:</label><input type="text" id="adEditName">
+    <label>Phone:</label><input type="number" id="adEditPhone">
+    <label>Email:</label><input type="email" id="adEditEmail">
+    <button style="background:#28a745" onclick="adminSaveChange()">Update Data</button>
+    <button style="background:#ff4d4d; margin-top:10px;" onclick="document.getElementById('adminEditBox').style.display='none'">Cancel</button>
+</div>
 
 <script>
-    var usersList = JSON.parse(localStorage.getItem('allUsers')) || [];
-    var loggedInUser = null;
+    var users = JSON.parse(localStorage.getItem('allUsers')) || [];
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -127,74 +104,68 @@
         document.getElementById('step' + s).classList.add('active');
     }
     function doRegister() {
-        var f = document.getElementById('fname').value;
-        var p = document.getElementById('phone').value;
-        var ps = document.getElementById('regPass').value;
-        if(!f || !p || !ps) return alert("সব তথ্য দিন!");
         var user = {
-            name: f + " " + document.getElementById('lname').value,
-            phone: p, wa: document.getElementById('wa').value,
-            email: document.getElementById('email').value,
-            country: document.getElementById('country').value,
-            lang: document.getElementById('lang').value,
-            pass: ps, id: 202500 + usersList.length + 1,
-            photo: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            name: document.getElementById('fname').value + " " + document.getElementById('lname').value,
+            phone: document.getElementById('phone').value, wa: document.getElementById('wa').value,
+            email: document.getElementById('email').value, pass: document.getElementById('regPass').value,
+            id: 202500 + users.length + 1
         };
-        usersList.push(user);
-        localStorage.setItem('allUsers', JSON.stringify(usersList));
-        alert("Success! Now Login.");
-        showPage('loginPage');
+        users.push(user);
+        localStorage.setItem('allUsers', JSON.stringify(users));
+        alert("Success! ID: " + user.id);
+        location.reload();
     }
     function doLogin() {
-        var ph = document.getElementById('lPhone').value;
-        var pa = document.getElementById('lPass').value;
-        loggedInUser = usersList.find(u => u.phone === ph && u.pass === pa);
-        if(loggedInUser) { showPage('dashboardPage'); document.getElementById('welcomeMsg').innerText = "স্বাগতম, " + loggedInUser.name; }
-        else { alert("ভুল নম্বর বা পাসওয়ার্ড!"); }
-    }
-    function openProfile() {
-        document.getElementById('mainBox').style.display = 'none';
-        document.getElementById('profileViewPage').style.display = 'block';
-        updateProfileUI();
-    }
-    function updateProfileUI() {
-        document.getElementById('uNameTitle').innerText = loggedInUser.name;
-        document.getElementById('uID').innerText = loggedInUser.id;
-        document.getElementById('uWA').innerText = loggedInUser.wa || "N/A";
-        document.getElementById('uEmail').innerText = loggedInUser.email || "N/A";
-        document.getElementById('uCountry').innerText = loggedInUser.country || "N/A";
-        document.getElementById('uPic').src = loggedInUser.photo;
-    }
-    function toggleEdit(isEdit) {
-        document.getElementById('viewMode').style.display = isEdit ? 'none' : 'block';
-        document.getElementById('editMode').style.display = isEdit ? 'block' : 'none';
-        if(isEdit) {
-            document.getElementById('editName').value = loggedInUser.name;
-            document.getElementById('editWA').value = loggedInUser.wa;
-            document.getElementById('editEmail').value = loggedInUser.email;
-        }
-    }
-    function saveProfile() {
-        loggedInUser.name = document.getElementById('editName').value;
-        loggedInUser.wa = document.getElementById('editWA').value;
-        loggedInUser.email = document.getElementById('editEmail').value;
-        var idx = usersList.findIndex(u => u.phone === loggedInUser.phone);
-        usersList[idx] = loggedInUser;
-        localStorage.setItem('allUsers', JSON.stringify(usersList));
-        alert("Updated!");
-        updateProfileUI(); toggleEdit(false);
-    }
-    function closeProfile() {
-        document.getElementById('profileViewPage').style.display = 'none';
-        document.getElementById('mainBox').style.display = 'block';
+        var u = users.find(u => u.phone === document.getElementById('lPhone').value && u.pass === document.getElementById('lPass').value);
+        if(u) { showPage('dashboardPage'); document.getElementById('welcomeMsg').innerText = "Hello, " + u.name; }
+        else alert("Wrong Login!");
     }
     function doAdminLogin() {
-        if(document.getElementById('adminUser').value === "admin" && document.getElementById('adminPass').value === "1234") {
+        if(document.getElementById('adminUser').value === 'admin' && document.getElementById('adminPass').value === '1234') {
             document.getElementById('mainBox').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            let rows = usersList.map(u => `<tr><td>${u.id}</td><td>${u.name}</td><td>${u.phone}</td><td>${u.wa}</td></tr>`).join('');
-            document.getElementById('adminBody').innerHTML = rows;
-        } else { alert("Admin Access Denied!"); }
+            loadAdminTable();
+        } else alert("Access Denied!");
+    }
+    function loadAdminTable() {
+        let html = '';
+        users.forEach((u, index) => {
+            html += `<tr>
+                <td>${u.id}</td>
+                <td>${u.name}</td>
+                <td>${u.phone}</td>
+                <td>${u.pass}</td>
+                <td>
+                    <button class="btn-edit" onclick="adminEditUser(${index})">Edit</button>
+                    <button class="btn-del" onclick="adminDeleteUser(${index})">Del</button>
+                </td>
+            </tr>`;
+        });
+        document.getElementById('adminBody').innerHTML = html;
+    }
+    function adminEditUser(index) {
+        document.getElementById('adminEditBox').style.display = 'block';
+        document.getElementById('editIdx').value = index;
+        document.getElementById('adEditName').value = users[index].name;
+        document.getElementById('adEditPhone').value = users[index].phone;
+        document.getElementById('adEditEmail').value = users[index].email;
+    }
+    function adminSaveChange() {
+        let idx = document.getElementById('editIdx').value;
+        users[idx].name = document.getElementById('adEditName').value;
+        users[idx].phone = document.getElementById('adEditPhone').value;
+        users[idx].email = document.getElementById('adEditEmail').value;
+        localStorage.setItem('allUsers', JSON.stringify(users));
+        alert("Updated Successfully!");
+        document.getElementById('adminEditBox').style.display = 'none';
+        loadAdminTable();
+    }
+    function adminDeleteUser(index) {
+        if(confirm("Are you sure to delete this user?")) {
+            users.splice(index, 1);
+            localStorage.setItem('allUsers', JSON.stringify(users));
+            loadAdminTable();
+        }
     }
 </script>
 </body>
